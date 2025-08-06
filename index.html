@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Кодовые имена: Дуэт</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .button-container, .mode-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #board {
+      display: grid;
+      gap: 4px;
+      margin-top: 20px;
+    }
+    .cell {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .good {
+      background-color: #28a745;
+    }
+    .bad {
+      background-color: #dc3545;
+    }
+    .neutral {
+      background-color: #adb5bd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Кодовые имена: Дуэт</h1>
+
+  <div class="mode-buttons" id="modeSelection">
+    <button onclick="startGame(4,4)">Режим 4x4</button>
+    <button onclick="startGame(5,5)">Режим 5x5</button>
+  </div>
+
+  <div class="button-container" id="controlButtons" style="display:none;">
+    <button onclick="showSide(0)">Показать карточку Игрока A</button>
+    <button onclick="showSide(1)">Показать карточку Игрока B</button>
+    <button onclick="hideBoard()">Скрыть карточки</button>
+  </div>
+
+  <div id="board"></div>
+
+  <script>
+    const cardList = {
+      '25': [
+        ["bad", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"],
+        ["neutral", "good"], ["good", "good"], ["good", "good"], ["good", "good"], ["good", "neutral"],
+        ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "bad"],
+        ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"],
+        ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
+      ],
+      '16': [
+        ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["good", "good"],
+        ["good", "good"], ["good", "good"], ["good", "neutral"], ["good", "neutral"],
+        ["good", "neutral"], ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"],
+        ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
+      ]
+    };
+
+    let currentBoard = [];
+
+    function startGame(w, h) {
+      const size = w * h;
+      let cards = cardList[size.toString()].slice();
+      shuffle(cards);
+      currentBoard = cards;
+      document.getElementById("modeSelection").style.display = "none";
+      document.getElementById("controlButtons").style.display = "flex";
+      drawBoard(w, h);
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function drawBoard(w, h) {
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+      board.style.gridTemplateColumns = `repeat(${w}, 60px)`;
+      board.style.gridTemplateRows = `repeat(${h}, 60px)`;
+
+      for (let i = 0; i < w * h; i++) {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.dataset.sideA = currentBoard[i][0];
+        div.dataset.sideB = currentBoard[i][1];
+        div.classList.add("neutral");
+        board.appendChild(div);
+      }
+    }
+
+    function showSide(sideIndex) {
+      document.querySelectorAll(".cell").forEach(cell => {
+        cell.className = "cell";
+        cell.classList.add(cell.dataset[sideIndex === 0 ? "sideA" : "sideB"]);
+      });
+    }
+
+    function hideBoard() {
+      document.querySelectorAll(".cell").forEach(cell => {
+        cell.className = "cell neutral";
+      });
+    }
+  </script>
+</body>
+</html>
