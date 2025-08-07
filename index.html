@@ -17,6 +17,18 @@
             justify-content: center;
         }
 
+        @media (max-width: 600px) {
+            .board {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            }
+
+            button {
+                font-size: 1.5vh;
+                padding: 1vh 2vh;
+            }
+        }
+
+
         h1 {
             font-size: 2.5vh;
             margin: 20px;
@@ -46,6 +58,7 @@
             background-color: #222;
             color: #ccc;
             font-size: 1vh;
+            min-width: 200px;
             padding: 0px 3svh;
             border-radius: 25vh;
             line-height: 3vh;
@@ -75,6 +88,7 @@
         .note {
             font-size: 1vh;
             color: #aaa;
+            text-align: center;
         }
 
         .board {
@@ -146,6 +160,10 @@
 </head>
 
 <body>
+    <audio id="flipSound" src="audio/flip.wav" preload="auto"></audio>
+    <audio id="resetSound" src="audio/reset.wav" preload="auto"></audio>
+
+    <button onclick="resetGame()">Сбросить игру</button>
     <h1>Кодовые имена: Дуэт</h1>
     <div class="button-group" id="modeSelection">
         <button onclick="startGame(4, 4)">Режим 4 × 4</button>
@@ -193,7 +211,61 @@
             ]
         };
 
+        function saveState() {
+            localStorage.setItem("gameState", JSON.stringify({
+                width,
+                height,
+                state
+            }));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem("gameState");
+            if (!saved) return false;
+
+            const data = JSON.parse(saved);
+            if (!data || !data.state || !data.width || !data.height) return false;
+
+            width = data.width;
+            height = data.height;
+            state = data.state;
+
+            modeSelection.style.display = "none";
+            controls.style.display = "flex";
+            board.style.gridTemplateColumns = `repeat(${width}, 8vh)`;
+
+            board.innerHTML = "";
+            for (let i = 0; i < state.length; i++) {
+                let div = document.createElement("div");
+                div.classList.add("card");
+
+                let inner = document.createElement("div");
+                inner.classList.add("card-inner");
+
+                let front = document.createElement("div");
+                front.classList.add("card-front");
+
+                let back = document.createElement("div");
+                back.classList.add("card-back");
+                back.dataset.index = i;
+
+                inner.appendChild(front);
+                inner.appendChild(back);
+                div.appendChild(inner);
+                board.appendChild(div);
+            }
+            return true;
+        }
+
+        function resetGame() {
+            playSound('resetSound')
+            localStorage.removeItem("gameState");
+            location.reload();
+        }
+
         function startGame(w, h) {
+            playSound('resetSound');
+
             width = w;
             height = h;
             modeSelection.style.display = "none";
@@ -203,6 +275,8 @@
             let template = [...cardTemplates[w * h]];
             shuffle(template);
             state = template;
+
+            saveState();
 
             board.innerHTML = "";
             for (let i = 0; i < template.length; i++) {
@@ -226,8 +300,47 @@
             }
         }
 
+        window.onload = function () {
+            loadState();
+        };
+
+        width = w;
+        height = h;
+        modeSelection.style.display = "none";
+        controls.style.display = "flex";
+        board.style.gridTemplateColumns = `repeat(${w}, 8vh)`;
+
+        let template = [...cardTemplates[w * h]];
+        shuffle(template);
+        state = template;
+
+        board.innerHTML = "";
+        for (let i = 0; i < template.length; i++) {
+            let div = document.createElement("div");
+            div.classList.add("card");
+
+            let inner = document.createElement("div");
+            inner.classList.add("card-inner");
+
+            let front = document.createElement("div");
+            front.classList.add("card-front");
+
+            let back = document.createElement("div");
+            back.classList.add("card-back");
+            back.dataset.index = i;
+
+            inner.appendChild(front);
+            inner.appendChild(back);
+            div.appendChild(inner);
+            board.appendChild(div);
+        }
+
         function showSide(side) {
-            if (!hiddenCards) return;
+            if (!hiddenCards) {
+                hideAll();
+                return;
+            }
+            playSound('flipSound');
             let isA = side === 'A';
             let cards = document.querySelectorAll(".card");
             cards.forEach((card, i) => {
@@ -246,11 +359,16 @@
 
 
         function hideAll() {
+            playSound('flipSound');
             let cards = document.querySelectorAll(".card");
             cards.forEach(card => {
                 card.classList.remove("flipped");
             });
             hiddenCards = true;
+        }
+
+        function playSound(sound) {
+            document.getElementById(sound).play();
         }
     </script>
 </body>
