@@ -1,192 +1,259 @@
-<!DOCTYPE html><html lang="ru">
+<!DOCTYPE html>
+<html lang="ru">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Кодовые имена: Дуэт</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #1e1e1e, #2c2c2c);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }h1 {
-  margin-bottom: 20px;
-}
+    <meta charset="UTF-8">
+    <title>Кодовые имена: Дуэт</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #1e1e1e, #222);
+            color: #c2c2c2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
 
-.button-group, .control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 30px;
-}
+        h1 {
+            margin: 20px;
+        }
 
-button {
-  padding: 12px 24px;
-  font-size: 18px;
-  border: none;
-  border-radius: 12px;
-  background: #444;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.3s;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-}
+        .container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
 
-button:hover {
-  background: #666;
-  transform: scale(1.05);
-}
+        .button-group,
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
 
-.note {
-  font-size: 14px;
-  color: #aaa;
-  margin-top: -10px;
-}
+        button {
+            box-sizing: border-box;
+            text-align: center;
+            margin: 0;
+            letter-spacing: 0.5px;
+            text-decoration-line: none;
+            font-family: 'Poppins', sans-serif, Arial, Verdana;
+            background-color: #222;
+            color: #ccc;
+            font-size: 12px;
+            padding: 0px 20px;
+            border-radius: 25px;
+            height: 42px;
+            line-height: 40px;
+            border: 1px solid #ccc;
+            outline: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            user-select: none;
+            border-color: #888;
+            transition: transform 0.2s, background 0.3s;
+        }
 
-.board {
-  display: grid;
-  gap: 10px;
-  margin-top: 20px;
-}
+        button:hover {
 
-.card {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  perspective: 1000px;
-}
+            color: #888;
+        }
 
-.card-inner {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-}
+        button:active {
+            transform: scale(0.99);
+            background: #888;
+            color: #222;
+        }
 
-.card.flipped .card-inner {
-  transform: rotateY(180deg);
-}
+        .note {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: -10px;
+        }
 
-.card-front, .card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 12px;
-}
+        .board {
+            display: grid;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 90vw;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        }
 
-.card-front {
-  background: #222;
-}
+        .card {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            perspective: 1000px;
+        }
 
-.card-back {
-  transform: rotateY(180deg);
-}
 
-.good { background: #228B22; }
-.bad { background: #B22222; }
-.neutral { background: #777; }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
 
-  </style>
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            box-shadow: #000 0 2px 2px, ;
+        }
+
+        .card-front {
+            background: #222;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .good {
+            background: #228B22;
+        }
+
+        .bad {
+            background: #961E2A;
+        }
+
+        .neutral {
+            background: #2B5C71;
+        }
+
+        .first-card {
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Кодовые имена: Дуэт</h1>
-  <div class="button-group" id="modeSelection">
-    <button onclick="startGame(4, 4)">Режим 4 × 4</button>
-    <button onclick="startGame(5, 5)">Режим 5 × 5</button>
-    <div class="note">Режим 5 × 5 — базовая игра</div>
-  </div>
-  <div class="control-group" id="controls" style="display:none">
-    <button onclick="showSide('A')">Показать карточку игрока A</button>
-    <button onclick="showSide('B')">Показать карточку игрока B</button>
-    <button onclick="hideAll()">Скрыть карточки</button>
-  </div>
-  <div id="board" class="board"></div>  <script>
-    let board = document.getElementById("board");
-    let controls = document.getElementById("controls");
-    let modeSelection = document.getElementById("modeSelection");
-    let state = [];
-    let width = 0;
-    let height = 0;
+    <h1>Кодовые имена: Дуэт</h1>
+    <div class="button-group" id="modeSelection">
+        <button onclick="startGame(4, 4)">Режим 4 × 4</button>
+        <button onclick="startGame(5, 5)">Режим 5 × 5</button>
+        <div class="note">Режим 5 × 5 — базовая игра</div>
+    </div>
+    <div class="container">
+        <div id="board" class="board"></div>
+    </div>
+    <div class="control-group" id="controls" style="display:none">
+        <button onclick="showSide('A')">Показать карточку игрока 1</button>
+        <button onclick="showSide('B')">Показать карточку игрока 2</button>
+        <button onclick="hideAll()">Скрыть карточки</button>
+    </div>
+    <script>
+        let board = document.getElementById("board");
+        let controls = document.getElementById("controls");
+        let modeSelection = document.getElementById("modeSelection");
+        let state = [];
+        let width = 0;
+        let height = 0;
+        let hiddenCards = true;
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
-    const cardTemplates = {
-      '25': [
-        ["bad", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"],
-        ["neutral", "good"], ["good", "good"], ["good", "good"], ["good", "good"], ["good", "neutral"],
-        ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "bad"],
-        ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"],
-        ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
-      ],
-      '16': [
-        ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["good", "good"],
-        ["good", "good"], ["good", "good"], ["good", "neutral"], ["good", "neutral"],
-        ["good", "neutral"], ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"],
-        ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
-      ]
-    };
+        const cardTemplates = {
+            '25': [
+                ["bad", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["neutral", "good"],
+                ["neutral", "good"], ["good", "good"], ["good", "good"], ["good", "good"], ["good", "neutral"],
+                ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "neutral"], ["good", "bad"],
+                ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"],
+                ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
+            ],
+            '16': [
+                ["neutral", "good"], ["neutral", "good"], ["neutral", "good"], ["good", "good"],
+                ["good", "good"], ["good", "good"], ["good", "neutral"], ["good", "neutral"],
+                ["good", "neutral"], ["neutral", "bad"], ["bad", "bad"], ["neutral", "neutral"],
+                ["neutral", "neutral"], ["neutral", "neutral"], ["neutral", "neutral"], ["bad", "neutral"]
+            ]
+        };
 
-    function startGame(w, h) {
-      width = w;
-      height = h;
-      modeSelection.style.display = "none";
-      controls.style.display = "flex";
-      board.style.gridTemplateColumns = `repeat(${w}, 80px)`;
+        function startGame(w, h) {
+            width = w;
+            height = h;
+            modeSelection.style.display = "none";
+            controls.style.display = "flex";
+            board.style.gridTemplateColumns = `repeat(${w}, 80px)`;
 
-      let template = [...cardTemplates[w * h]];
-      shuffle(template);
-      state = template;
+            let template = [...cardTemplates[w * h]];
+            shuffle(template);
+            state = template;
 
-      board.innerHTML = "";
-      for (let i = 0; i < template.length; i++) {
-        let div = document.createElement("div");
-        div.classList.add("card");
+            board.innerHTML = "";
+            for (let i = 0; i < template.length; i++) {
+                let div = document.createElement("div");
+                div.classList.add("card");
 
-        let inner = document.createElement("div");
-        inner.classList.add("card-inner");
+                let inner = document.createElement("div");
+                inner.classList.add("card-inner");
 
-        let front = document.createElement("div");
-        front.classList.add("card-front");
+                let front = document.createElement("div");
+                front.classList.add("card-front");
 
-        let back = document.createElement("div");
-        back.classList.add("card-back");
-        back.dataset.index = i;
+                let back = document.createElement("div");
+                back.classList.add("card-back");
+                back.dataset.index = i;
 
-        inner.appendChild(front);
-        inner.appendChild(back);
-        div.appendChild(inner);
-        board.appendChild(div);
-      }
-    }
+                inner.appendChild(front);
+                inner.appendChild(back);
+                div.appendChild(inner);
+                board.appendChild(div);
+            }
+        }
 
-    function showSide(side) {
-      let isA = side === 'A';
-      let cards = document.querySelectorAll(".card");
-      cards.forEach((card, i) => {
-        let type = state[i][isA ? 0 : 1];
-        let back = card.querySelector(".card-back");
-        back.className = `card-back ${type}`;
-        card.classList.add("flipped");
-      });
-    }
+        function showSide(side) {
+            if (!hiddenCards) return;
+            let isA = side === 'A';
+            let cards = document.querySelectorAll(".card");
+            cards.forEach((card, i) => {
+                let type = state[i][isA ? 0 : 1];
+                let back = card.querySelector(".card-back");
+                back.className = `card-back ${type}`;
+                back.textContent = "";
+                if (i === 0) {
+                    back.classList.add("first-card");
+                    back.textContent = isA ? "Игрок 1" : "Игрок 2";
+                }
+                card.classList.add("flipped");
+            });
+            hiddenCards = false;
+        }
 
-    function hideAll() {
-      let cards = document.querySelectorAll(".card");
-      cards.forEach(card => {
-        card.classList.remove("flipped");
-      });
-    }
-  </script></body>
+
+        function hideAll() {
+            let cards = document.querySelectorAll(".card");
+            cards.forEach(card => {
+                card.classList.remove("flipped");
+            });
+            hiddenCards = true;
+        }
+    </script>
+</body>
+
 </html>
